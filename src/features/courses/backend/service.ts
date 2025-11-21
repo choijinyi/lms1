@@ -180,3 +180,78 @@ export const createCourse = async (
   return success(parsed.data);
 };
 
+/**
+ * 코스 수정 (Instructor only)
+ */
+export const updateCourse = async (
+  client: SupabaseClient,
+  courseId: string,
+  instructorId: string,
+  input: UpdateCourseInput
+): Promise<HandlerResult<CourseResponse, CoursesServiceError, unknown>> => {
+  // 1. 코스 조회 및 권한 확인
+  const { data: course, error: fetchError } = await client
+    .from('courses')
+    .select('*')
+    .eq('id', courseId)
+    .maybeSingle();
+
+  if (fetchError) {
+    return failure(500, coursesErrorCodes.updateError, fetchError.message);
+  }
+
+  if (!course) {
+    return failure(404, coursesErrorCodes.notFound, 'Course not found');
+  }
+
+  if (course.instructor_id !== instructorId) {
+    return failure(403, coursesErrorCodes.unauthorized, 'You are not the instructor of this course');
+  }
+
+  // 2. 업데이트할 필드 구성
+  const updateData: any = {};
+  if (input.title !== undefined) updateData.title = input.title;
+  if (input.description !== undefined) updateData.description = input.description;
+  if (input.category !== undefined) updateData.category = input.category;
+  if (input.difficulty !== undefined) updateData.difficulty = input.difficulty;
+  if (input.curriculum !== undefined) updateData.curriculum = input.curriculum;
+  if (input.status !== undefined) updateData.status = input.status;
+
+  // 3. 코스 업데이트
+  const { data, error } = await client
+    .from('courses')
+    .update(updateData)
+    .eq('id', courseId)
+    .select('*')
+    .single();
+
+  if (error) {
+    return failure(500, coursesErrorCodes.updateError, error.message);
+  }
+
+  const mappedCourse = {
+    id: data.id,
+    instructorId: data.instructor_id,
+    title: data.title,
+    description: data.description,
+    category: data.category,
+    difficulty: data.difficulty,
+    curriculum: data.curriculum,
+    status: data.status,
+    createdAt: data.created_at,
+    updatedAt: data.updated_at,
+  };
+
+  const parsed = CourseResponseSchema.safeParse(mappedCourse);
+  if (!parsed.success) {
+    return failure(
+      500,
+      coursesErrorCodes.validationError,
+      'Course update validation failed',
+      parsed.error.format()
+    );
+  }
+
+  return success(parsed.data);
+};
+

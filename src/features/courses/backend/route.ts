@@ -6,11 +6,13 @@ import {
   getCourses,
   getCourseById,
   createCourse,
+  updateCourse,
 } from './service';
 import {
   CoursesQuerySchema,
   CreateCourseInputSchema,
   CreateCourseByOperatorInputSchema,
+  UpdateCourseInputSchema,
 } from './schema';
 
 export const registerCoursesRoutes = (app: Hono<AppEnv>) => {
@@ -85,6 +87,25 @@ export const registerCoursesRoutes = (app: Hono<AppEnv>) => {
       } else {
         return c.json({ error: 'Forbidden' }, 403);
       }
+    }
+  );
+
+  // 코스 수정 (강사만 가능)
+  app.patch(
+    `${basePath}/:id`,
+    zValidator('json', UpdateCourseInputSchema),
+    async (c) => {
+      const id = c.req.param('id');
+      const input = c.req.valid('json');
+      const supabase = c.get('supabase');
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        return c.json({ error: 'Unauthorized' }, 401);
+      }
+
+      const result = await updateCourse(supabase, id, user.id, input);
+      return respond(c, result);
     }
   );
 };

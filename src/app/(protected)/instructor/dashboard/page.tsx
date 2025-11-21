@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCoursesQuery } from "@/features/courses/hooks/useCoursesQuery";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PlusCircle, BookOpen, Users } from "lucide-react";
+import { PlusCircle, BookOpen, Users, Settings } from "lucide-react";
 
 export default function InstructorDashboard() {
   // TODO: 내 코스만 가져오는 쿼리로 변경 필요 (현재는 전체 공개 코스만 가져옴)
@@ -59,17 +59,31 @@ export default function InstructorDashboard() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {coursesData?.courses.map((course) => (
             <Card key={course.id} className="hover:bg-muted/50 transition-colors">
-              <Link href={`/instructor/courses/${course.id}`}>
-                <CardHeader>
-                  <CardTitle>{course.title}</CardTitle>
-                  <CardDescription>{course.category} • {course.status}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {course.description}
-                  </p>
-                </CardContent>
-              </Link>
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle>{course.title}</CardTitle>
+                    <CardDescription>{course.category} • {course.status}</CardDescription>
+                  </div>
+                  <Link href={`/instructor/courses/${course.id}/edit`}>
+                    <Button variant="ghost" size="icon">
+                      <Settings className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {course.description}
+                </p>
+                <div className="mt-4 flex gap-2">
+                  <Link href={`/instructor/courses/${course.id}/assignments`} className="flex-1">
+                    <Button variant="outline" size="sm" className="w-full">
+                      과제 관리
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
             </Card>
           ))}
           
