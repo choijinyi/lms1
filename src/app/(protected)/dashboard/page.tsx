@@ -13,7 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BookOpen, Search, GraduationCap } from "lucide-react";
+import { BookOpen, Search, GraduationCap, Award } from "lucide-react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
@@ -45,7 +45,7 @@ export default function DashboardPage({ params }: DashboardPageProps) {
       </header>
 
       {/* Quick Actions */}
-      <section className="grid gap-6 md:grid-cols-3">
+      <section className="grid gap-6 md:grid-cols-4">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1">
           <CardHeader className="pb-3">
             <CardTitle className="text-xl flex items-center gap-2 font-bold">
@@ -75,6 +75,23 @@ export default function DashboardPage({ params }: DashboardPageProps) {
             <Link href="/my-courses" className="w-full">
               <Button variant="outline" className="w-full border-2 border-[hsl(var(--oikos-green))] text-[hsl(var(--oikos-green))] hover:bg-[hsl(var(--oikos-green))]/10 font-bold transform hover:scale-105 transition-all">
                 학습 진도 보기
+              </Button>
+            </Link>
+          </CardFooter>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-200 shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl flex items-center gap-2 font-bold">
+              <Award className="h-6 w-6 text-orange-600" />
+              내 성적
+            </CardTitle>
+            <CardDescription className="text-gray-700">과제 성적과 피드백을 확인하세요</CardDescription>
+          </CardHeader>
+          <CardFooter>
+            <Link href="/grades" className="w-full">
+              <Button variant="outline" className="w-full border-2 border-orange-600 text-orange-600 hover:bg-orange-600/10 font-bold transform hover:scale-105 transition-all">
+                성적 보기
               </Button>
             </Link>
           </CardFooter>

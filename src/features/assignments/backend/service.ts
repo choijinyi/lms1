@@ -143,6 +143,29 @@ export const getSubmissionsByAssignment = async (
   return success({ submissions: (data || []).map(mapSubmission) });
 };
 
+export const getMySubmissions = async (
+  client: SupabaseClient,
+  userId: string,
+  status?: string
+): Promise<HandlerResult<SubmissionListResponse, AssignmentsServiceError, unknown>> => {
+  let query = client
+    .from('submissions')
+    .select('*')
+    .eq('user_id', userId);
+
+  if (status) {
+    query = query.eq('status', status);
+  }
+
+  const { data, error } = await query.order('graded_at', { ascending: false, nullsFirst: false });
+
+  if (error) {
+    return failure(500, assignmentsErrorCodes.createError, error.message);
+  }
+
+  return success({ submissions: (data || []).map(mapSubmission) });
+};
+
 export const gradeSubmission = async (
   client: SupabaseClient,
   submissionId: string,

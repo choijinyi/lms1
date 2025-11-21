@@ -33,6 +33,19 @@ export const useSubmissionsQuery = (assignmentId: string) => {
   });
 };
 
+export const useMySubmissionsQuery = (status?: string) => {
+  return useQuery({
+    queryKey: ['my-submissions', status],
+    queryFn: async () => {
+      const url = status
+        ? `/api/assignments/submissions/my?status=${status}`
+        : '/api/assignments/submissions/my';
+      const { data } = await apiClient.get(url);
+      return SubmissionListResponseSchema.parse(data);
+    },
+  });
+};
+
 export const useAssignmentMutations = () => {
   const queryClient = useQueryClient();
 

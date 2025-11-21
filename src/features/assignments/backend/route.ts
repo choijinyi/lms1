@@ -7,6 +7,7 @@ import {
   getAssignmentsByCourse,
   createSubmission,
   getSubmissionsByAssignment,
+  getMySubmissions,
   gradeSubmission,
   updateAssignmentStatus,
   updateAssignment,
@@ -65,6 +66,18 @@ export const registerAssignmentsRoutes = (app: Hono<AppEnv>) => {
     const supabase = c.get('supabase');
     // TODO: Permission check
     const result = await getSubmissionsByAssignment(supabase, id);
+    return respond(c, result);
+  });
+
+  // 내 제출물 조회 (학습자)
+  app.get(`${basePath}/submissions/my`, async (c) => {
+    const supabase = c.get('supabase');
+    const status = c.req.query('status'); // optional: 'graded', 'submitted', etc.
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return c.json({ error: 'Unauthorized' }, 401);
+
+    const result = await getMySubmissions(supabase, user.id, status);
     return respond(c, result);
   });
 
