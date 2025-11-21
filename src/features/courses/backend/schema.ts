@@ -27,6 +27,13 @@ export const CreateCourseInputSchema = z.object({
 
 export type CreateCourseInput = z.infer<typeof CreateCourseInputSchema>;
 
+// 관리자용 코스 생성 스키마 (담당 교수 ID 포함)
+export const CreateCourseByOperatorInputSchema = CreateCourseInputSchema.extend({
+  instructorId: z.string().uuid('Valid instructor ID is required'),
+});
+
+export type CreateCourseByOperatorInput = z.infer<typeof CreateCourseByOperatorInputSchema>;
+
 export const UpdateCourseInputSchema = CreateCourseInputSchema.partial().extend({
   status: z.enum(['draft', 'published', 'archived']).optional(),
 });
@@ -54,4 +61,3 @@ export type CoursesResponse = z.infer<typeof CoursesResponseSchema>;
 
 export const CourseResponseSchema = CourseSchema;
 export type CourseResponse = z.infer<typeof CourseResponseSchema>;
-

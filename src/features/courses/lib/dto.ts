@@ -5,6 +5,7 @@ export {
   CourseSchema,
   CoursesQuerySchema,
   CreateCourseInputSchema,
+  CreateCourseByOperatorInputSchema,
   UpdateCourseInputSchema,
   CoursesResponseSchema,
   CourseResponseSchema,
@@ -14,8 +15,8 @@ export type {
   Course,
   CoursesQuery,
   CreateCourseInput,
+  CreateCourseByOperatorInput,
   UpdateCourseInput,
   CoursesResponse,
   CourseResponse,
 } from '../backend/schema';
-

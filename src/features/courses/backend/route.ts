@@ -10,6 +10,7 @@ import {
 import {
   CoursesQuerySchema,
   CreateCourseInputSchema,
+  CreateCourseByOperatorInputSchema,
 } from './schema';
 
 export const registerCoursesRoutes = (app: Hono<AppEnv>) => {
@@ -35,26 +36,55 @@ export const registerCoursesRoutes = (app: Hono<AppEnv>) => {
     return respond(c, result);
   });
 
-  // 생성 (보호된 라우트 예시 - 실제로는 미들웨어에서 유저 체크 필요)
+  // 코스 생성 (강사/관리자)
+  // 강사는 본인 ID로, 관리자는 입력받은 instructorId로 생성
   app.post(
     basePath,
-    zValidator('json', CreateCourseInputSchema),
     async (c) => {
-      const input = c.req.valid('json');
       const supabase = c.get('supabase');
-      
-      // TODO: 실제 유저 ID 가져오기 (현재는 context에서 가져와야 함)
-      // 임시로 헤더나 세션에서 가져오는 로직이 필요하지만, 
-      // 여기서는 Supabase auth.getUser()를 통해 확인 가능
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
         return c.json({ error: 'Unauthorized' }, 401);
       }
 
-      const result = await createCourse(supabase, user.id, input);
-      return respond(c, result);
+      // 사용자의 역할 확인 (DB에서 확인 필요)
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+      const role = profile?.role;
+
+      if (role === 'operator') {
+        // 관리자는 instructorId를 포함한 요청을 보냄
+        const json = await c.req.json();
+        const parsed = CreateCourseByOperatorInputSchema.safeParse(json);
+        
+        if (!parsed.success) {
+          return c.json({ error: 'Invalid input', details: parsed.error.format() }, 400);
+        }
+
+        const { instructorId, ...input } = parsed.data;
+        // 입력받은 instructorId가 유효한지(실제 강사인지) 체크하는 로직이 있으면 좋음
+        const result = await createCourse(supabase, instructorId, input);
+        return respond(c, result);
+
+      } else if (role === 'instructor') {
+        // 강사는 본인 ID 사용
+        const json = await c.req.json();
+        const parsed = CreateCourseInputSchema.safeParse(json);
+
+        if (!parsed.success) {
+          return c.json({ error: 'Invalid input', details: parsed.error.format() }, 400);
+        }
+
+        const result = await createCourse(supabase, user.id, parsed.data);
+        return respond(c, result);
+      } else {
+        return c.json({ error: 'Forbidden' }, 403);
+      }
     }
   );
 };
-
