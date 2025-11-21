@@ -77,61 +77,61 @@ export default function LoginPage({ params }: LoginPageProps) {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center gap-12 px-6 py-16 bg-gradient-to-b from-white to-gray-50">
+    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center gap-12 px-6 py-16 bg-gradient-to-br from-blue-50 via-white to-green-50">
       <header className="flex flex-col items-center gap-4 text-center">
-        <div className="w-20 h-20 bg-[hsl(var(--harvard-crimson))] rounded-full flex items-center justify-center mb-2">
-          <span className="text-4xl font-bold text-white font-serif">H</span>
+        <div className="w-24 h-24 bg-gradient-to-br from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] rounded-2xl flex items-center justify-center mb-2 shadow-xl transform hover:scale-105 transition-transform">
+          <span className="text-5xl font-bold text-white">O</span>
         </div>
-        <h1 className="text-5xl font-bold text-[hsl(var(--harvard-crimson))] font-serif tracking-tight">
-          Harvard Portal
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] bg-clip-text text-transparent tracking-tight">
+          OIKOS University
         </h1>
         <p className="text-gray-600 text-lg max-w-md">
-          Enter your credentials to access the academic portal
+          Welcome to your learning journey
         </p>
       </header>
         
         <div className="grid w-full gap-10 md:grid-cols-2 max-w-4xl">
           <div className="flex flex-col gap-6">
             <Tabs defaultValue="student" onValueChange={(val) => setLoginType(val as any)} className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-gray-100 p-1 rounded-lg">
+              <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-blue-50 to-green-50 p-1 rounded-xl border-2 border-blue-200">
                 <TabsTrigger 
                   value="student" 
-                  className="data-[state=active]:bg-[hsl(var(--harvard-crimson))] data-[state=active]:text-white font-semibold"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(var(--oikos-blue))] data-[state=active]:to-[hsl(var(--oikos-green))] data-[state=active]:text-white font-semibold rounded-lg"
                 >
                   <User className="mr-2 h-4 w-4" />
-                  Student
+                  학생
                 </TabsTrigger>
                 <TabsTrigger 
                   value="instructor"
-                  className="data-[state=active]:bg-[hsl(var(--harvard-crimson))] data-[state=active]:text-white font-semibold"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(var(--oikos-blue))] data-[state=active]:to-[hsl(var(--oikos-green))] data-[state=active]:text-white font-semibold rounded-lg"
                 >
                   <GraduationCap className="mr-2 h-4 w-4" />
-                  Faculty
+                  교수
                 </TabsTrigger>
                 <TabsTrigger 
                   value="operator"
-                  className="data-[state=active]:bg-[hsl(var(--harvard-crimson))] data-[state=active]:text-white font-semibold"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(var(--oikos-blue))] data-[state=active]:to-[hsl(var(--oikos-green))] data-[state=active]:text-white font-semibold rounded-lg"
                 >
                   <ShieldCheck className="mr-2 h-4 w-4" />
-                  Admin
+                  관리자
                 </TabsTrigger>
               </TabsList>
               
               <div className="mt-4">
-                <p className="text-sm text-gray-600 text-center mb-4 italic">
-                  {loginType === "student" && "Access your courses and academic progress"}
-                  {loginType === "instructor" && "Manage courses and evaluate student work"}
-                  {loginType === "operator" && "Administer the academic system"}
+                <p className="text-sm text-gray-600 text-center mb-4">
+                  {loginType === "student" && "🎓 강의 수강 및 학습 진도를 관리하세요"}
+                  {loginType === "instructor" && "👨‍🏫 강의를 개설하고 학생들을 지도하세요"}
+                  {loginType === "operator" && "⚙️ 시스템을 관리하고 운영하세요"}
                 </p>
               </div>
             </Tabs>
 
             <form
               onSubmit={handleSubmit}
-              className="flex flex-col gap-5 rounded-lg border-2 border-gray-200 p-8 shadow-lg bg-white"
+              className="flex flex-col gap-5 rounded-2xl border-2 border-blue-100 p-8 shadow-2xl bg-white"
             >
               <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
-                Email Address
+                이메일
                 <input
                   type="email"
                   name="email"
@@ -139,12 +139,12 @@ export default function LoginPage({ params }: LoginPageProps) {
                   required
                   value={formState.email}
                   onChange={handleChange}
-                  className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
-                  placeholder="your.email@harvard.edu"
+                  className="rounded-xl border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 focus:outline-none transition-all"
+                  placeholder="your.email@oikos.edu"
                 />
               </label>
               <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
-                Password
+                비밀번호
                 <input
                   type="password"
                   name="password"
@@ -152,45 +152,46 @@ export default function LoginPage({ params }: LoginPageProps) {
                   required
                   value={formState.password}
                   onChange={handleChange}
-                  className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
+                  className="rounded-xl border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 focus:outline-none transition-all"
                   placeholder="••••••••"
                 />
               </label>
               {errorMessage ? (
-                <p className="text-sm text-rose-600 bg-rose-50 p-3 rounded-md border border-rose-200">{errorMessage}</p>
+                <p className="text-sm text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200">{errorMessage}</p>
               ) : null}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="rounded-md bg-[hsl(var(--harvard-crimson))] px-4 py-3 text-base font-semibold text-white transition hover:bg-[hsl(var(--harvard-crimson))]/90 disabled:cursor-not-allowed disabled:bg-gray-400 shadow-md hover:shadow-lg"
+                className="rounded-xl bg-gradient-to-r from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] px-4 py-3 text-base font-bold text-white transition hover:shadow-xl hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50 shadow-lg transform"
               >
-                {isSubmitting ? "Signing in..." : "Sign In"}
+                {isSubmitting ? "로그인 중..." : "로그인"}
               </button>
               <p className="text-sm text-gray-600 text-center">
-                Don't have an account?{" "}
+                계정이 없으신가요?{" "}
                 <Link
                   href="/signup"
-                  className="font-semibold text-[hsl(var(--harvard-crimson))] hover:underline"
+                  className="font-bold text-[hsl(var(--oikos-blue))] hover:underline"
                 >
-                  Register
+                  회원가입
                 </Link>
               </p>
             </form>
           </div>
 
-          <figure className="overflow-hidden rounded-lg border-2 border-gray-200 shadow-xl">
+          <figure className="overflow-hidden rounded-2xl border-2 border-blue-200 shadow-2xl relative group">
+            <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--oikos-blue))]/10 to-[hsl(var(--oikos-green))]/10 z-10 group-hover:opacity-0 transition-opacity"></div>
             <Image
               src={
                 loginType === "instructor" 
-                  ? "https://picsum.photos/seed/harvard-faculty/640/640" 
+                  ? "https://picsum.photos/seed/oikos-faculty/640/640" 
                   : loginType === "operator"
-                  ? "https://picsum.photos/seed/harvard-admin/640/640"
-                  : "https://picsum.photos/seed/harvard-campus/640/640"
+                  ? "https://picsum.photos/seed/oikos-admin/640/640"
+                  : "https://picsum.photos/seed/oikos-campus/640/640"
               }
-              alt="Harvard Campus"
+              alt="OIKOS University"
               width={640}
               height={640}
-              className="h-full w-full object-cover transition-all duration-500 hover:scale-105"
+              className="h-full w-full object-cover transition-all duration-500 group-hover:scale-110"
               priority
             />
           </figure>

@@ -121,25 +121,25 @@ export default function SignupPage({ params }: SignupPageProps) {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center gap-12 px-6 py-16 bg-gradient-to-b from-white to-gray-50">
+    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center gap-12 px-6 py-16 bg-gradient-to-br from-blue-50 via-white to-green-50">
       <header className="flex flex-col items-center gap-4 text-center">
-        <div className="w-20 h-20 bg-[hsl(var(--harvard-crimson))] rounded-full flex items-center justify-center mb-2">
-          <span className="text-4xl font-bold text-white font-serif">H</span>
+        <div className="w-24 h-24 bg-gradient-to-br from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] rounded-2xl flex items-center justify-center mb-2 shadow-xl transform hover:scale-105 transition-transform">
+          <span className="text-5xl font-bold text-white">O</span>
         </div>
-        <h1 className="text-5xl font-bold text-[hsl(var(--harvard-crimson))] font-serif tracking-tight">
-          Join Harvard Portal
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] bg-clip-text text-transparent tracking-tight">
+          OIKOS University
         </h1>
         <p className="text-gray-600 text-lg max-w-md">
-          Create your account to access the academic portal
+          새로운 학습 여정을 시작하세요
         </p>
       </header>
       <div className="grid w-full gap-10 md:grid-cols-2 max-w-4xl">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-5 rounded-lg border-2 border-gray-200 p-8 shadow-lg bg-white"
+          className="flex flex-col gap-5 rounded-2xl border-2 border-blue-100 p-8 shadow-2xl bg-white"
         >
           <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
-            Email Address
+            이메일
             <input
               type="email"
               name="email"
@@ -147,12 +147,12 @@ export default function SignupPage({ params }: SignupPageProps) {
               required
               value={formState.email}
               onChange={handleChange}
-              className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
-              placeholder="your.email@harvard.edu"
+              className="rounded-xl border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 focus:outline-none transition-all"
+              placeholder="your.email@oikos.edu"
             />
           </label>
           <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
-            Password
+            비밀번호
             <input
               type="password"
               name="password"
@@ -160,12 +160,12 @@ export default function SignupPage({ params }: SignupPageProps) {
               required
               value={formState.password}
               onChange={handleChange}
-              className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
+              className="rounded-xl border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 focus:outline-none transition-all"
               placeholder="••••••••"
             />
           </label>
           <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
-            Confirm Password
+            비밀번호 확인
             <input
               type="password"
               name="confirmPassword"
@@ -173,40 +173,41 @@ export default function SignupPage({ params }: SignupPageProps) {
               required
               value={formState.confirmPassword}
               onChange={handleChange}
-              className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
+              className="rounded-xl border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 focus:outline-none transition-all"
               placeholder="••••••••"
             />
           </label>
           {errorMessage ? (
-            <p className="text-sm text-rose-600 bg-rose-50 p-3 rounded-md border border-rose-200">{errorMessage}</p>
+            <p className="text-sm text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-200">{errorMessage}</p>
           ) : null}
           {infoMessage ? (
-            <p className="text-sm text-emerald-600 bg-emerald-50 p-3 rounded-md border border-emerald-200">{infoMessage}</p>
+            <p className="text-sm text-emerald-600 bg-emerald-50 p-3 rounded-xl border border-emerald-200">{infoMessage}</p>
           ) : null}
           <button
             type="submit"
             disabled={isSubmitting || isSubmitDisabled}
-            className="rounded-md bg-[hsl(var(--harvard-crimson))] px-4 py-3 text-base font-semibold text-white transition hover:bg-[hsl(var(--harvard-crimson))]/90 disabled:cursor-not-allowed disabled:bg-gray-400 shadow-md hover:shadow-lg"
+            className="rounded-xl bg-gradient-to-r from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] px-4 py-3 text-base font-bold text-white transition hover:shadow-xl hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50 shadow-lg transform"
           >
-            {isSubmitting ? "Creating Account..." : "Create Account"}
+            {isSubmitting ? "계정 생성 중..." : "회원가입"}
           </button>
           <p className="text-sm text-gray-600 text-center">
-            Already have an account?{" "}
+            이미 계정이 있으신가요?{" "}
             <Link
               href="/login"
-              className="font-semibold text-[hsl(var(--harvard-crimson))] hover:underline"
+              className="font-bold text-[hsl(var(--oikos-blue))] hover:underline"
             >
-              Sign In
+              로그인
             </Link>
           </p>
         </form>
-        <figure className="overflow-hidden rounded-lg border-2 border-gray-200 shadow-xl">
+        <figure className="overflow-hidden rounded-2xl border-2 border-blue-200 shadow-2xl relative group">
+          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--oikos-blue))]/10 to-[hsl(var(--oikos-green))]/10 z-10 group-hover:opacity-0 transition-opacity"></div>
           <Image
-            src="https://picsum.photos/seed/harvard-library/640/640"
-            alt="Harvard Campus"
+            src="https://picsum.photos/seed/oikos-library/640/640"
+            alt="OIKOS University"
             width={640}
             height={640}
-            className="h-full w-full object-cover hover:scale-105 transition-all duration-500"
+            className="h-full w-full object-cover group-hover:scale-110 transition-all duration-500"
             priority
           />
         </figure>

@@ -91,45 +91,50 @@ export default function OperatorCreateCoursePage() {
   };
 
   return (
-    <div className="container mx-auto py-12 max-w-3xl min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <div className="mb-8 pb-6 border-b-2 border-[hsl(var(--harvard-crimson))]">
-        <h1 className="text-4xl font-bold font-serif text-[hsl(var(--harvard-crimson))] mb-2">
-          Create New Course
-        </h1>
-        <p className="text-gray-600">Administrative Portal - Course Management</p>
+    <div className="container mx-auto py-12 max-w-3xl min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+      <div className="mb-8 pb-6 flex items-center gap-4">
+        <div className="w-14 h-14 bg-gradient-to-br from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] rounded-xl flex items-center justify-center shadow-lg">
+          <span className="text-2xl font-bold text-white">O</span>
+        </div>
+        <div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] bg-clip-text text-transparent mb-1">
+            새 강의 개설
+          </h1>
+          <p className="text-gray-600">관리자 포털 - 강의 관리</p>
+        </div>
       </div>
       
-      <Card className="border-2 border-gray-200 shadow-xl">
-        <CardHeader className="bg-gray-50 border-b-2 border-gray-200">
-          <CardTitle className="text-2xl font-serif text-[hsl(var(--harvard-black))]">
-            Course Details
+      <Card className="border-2 border-blue-200 shadow-2xl">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50 border-b-2 border-blue-200">
+          <CardTitle className="text-2xl font-bold text-[hsl(var(--oikos-navy))]">
+            강의 상세 정보
           </CardTitle>
           <CardDescription className="text-gray-600">
-            Enter the course information and assign a faculty member
+            강의 정보를 입력하고 담당 교수를 지정하세요
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-7 pt-8">
+          <CardContent className="space-y-7 pt-8 bg-white">
             <div className="space-y-3">
-              <Label htmlFor="title" className="text-base font-semibold text-gray-700">
-                Course Title *
+              <Label htmlFor="title" className="text-base font-bold text-gray-700">
+                강의명 *
               </Label>
               <Input 
                 id="title" 
                 name="title" 
                 required 
-                placeholder="e.g., Introduction to Computer Science" 
-                className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base py-3"
+                placeholder="예: 컴퓨터과학 입문" 
+                className="border-2 border-gray-300 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 text-base py-3 rounded-xl"
               />
             </div>
 
             <div className="space-y-3">
-              <Label htmlFor="instructorId" className="text-base font-semibold text-gray-700">
-                Faculty Member *
+              <Label htmlFor="instructorId" className="text-base font-bold text-gray-700">
+                담당 교수 *
               </Label>
               <Select name="instructorId" required>
-                <SelectTrigger className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base py-3">
-                  <SelectValue placeholder="Select faculty member" />
+                <SelectTrigger className="border-2 border-gray-300 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 text-base py-3 rounded-xl">
+                  <SelectValue placeholder="교수 선택" />
                 </SelectTrigger>
                 <SelectContent>
                   {instructors.map((inst) => (
@@ -138,76 +143,76 @@ export default function OperatorCreateCoursePage() {
                     </SelectItem>
                   ))}
                   {instructors.length === 0 && (
-                    <SelectItem value="disabled" disabled>No faculty members registered</SelectItem>
+                    <SelectItem value="disabled" disabled>등록된 교수가 없습니다</SelectItem>
                   )}
                 </SelectContent>
               </Select>
               {instructors.length === 0 && (
-                <p className="text-sm text-amber-600 bg-amber-50 p-3 rounded-md border border-amber-200">
-                  ⚠️ Please ensure faculty accounts are created before adding courses
+                <p className="text-sm text-amber-600 bg-amber-50 p-3 rounded-xl border-2 border-amber-200">
+                  ⚠️ 강의를 개설하기 전에 교수 계정을 먼저 생성해주세요
                 </p>
               )}
             </div>
             
             <div className="space-y-3">
-              <Label htmlFor="description" className="text-base font-semibold text-gray-700">
-                Course Description
+              <Label htmlFor="description" className="text-base font-bold text-gray-700">
+                강의 설명
               </Label>
               <Textarea 
                 id="description" 
                 name="description" 
-                placeholder="Provide a comprehensive description of the course objectives, content, and requirements" 
-                className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base min-h-32"
+                placeholder="강의 목표, 내용 및 요구사항에 대한 상세한 설명을 입력하세요" 
+                className="border-2 border-gray-300 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 text-base min-h-32 rounded-xl"
                 rows={5}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-3">
-                <Label htmlFor="category" className="text-base font-semibold text-gray-700">
-                  Department *
+                <Label htmlFor="category" className="text-base font-bold text-gray-700">
+                  학과/분야 *
                 </Label>
                 <Input 
                   id="category" 
                   name="category" 
                   required 
-                  placeholder="e.g., Computer Science" 
-                  className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base py-3"
+                  placeholder="예: 컴퓨터공학" 
+                  className="border-2 border-gray-300 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 text-base py-3 rounded-xl"
                 />
               </div>
               
               <div className="space-y-3">
-                <Label htmlFor="difficulty" className="text-base font-semibold text-gray-700">
-                  Level *
+                <Label htmlFor="difficulty" className="text-base font-bold text-gray-700">
+                  난이도 *
                 </Label>
                 <Select name="difficulty" required defaultValue="beginner">
-                  <SelectTrigger className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base py-3">
-                    <SelectValue placeholder="Select level" />
+                  <SelectTrigger className="border-2 border-gray-300 focus:border-[hsl(var(--oikos-blue))] focus:ring-2 focus:ring-[hsl(var(--oikos-blue))]/20 text-base py-3 rounded-xl">
+                    <SelectValue placeholder="난이도 선택" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="beginner" className="text-base py-2">Introductory (100-200)</SelectItem>
-                    <SelectItem value="intermediate" className="text-base py-2">Intermediate (300)</SelectItem>
-                    <SelectItem value="advanced" className="text-base py-2">Advanced (400+)</SelectItem>
+                    <SelectItem value="beginner" className="text-base py-2">기초 (1-2학년)</SelectItem>
+                    <SelectItem value="intermediate" className="text-base py-2">중급 (3학년)</SelectItem>
+                    <SelectItem value="advanced" className="text-base py-2">고급 (4학년)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-end gap-3 bg-gray-50 border-t-2 border-gray-200 py-5">
+          <CardFooter className="flex justify-end gap-3 bg-gradient-to-r from-blue-50 to-green-50 border-t-2 border-blue-200 py-5">
             <Button 
               type="button" 
               variant="outline" 
               onClick={() => router.back()}
-              className="border-2 border-gray-300 font-semibold"
+              className="border-2 border-gray-300 font-bold hover:bg-gray-100 transform hover:scale-105 transition-all"
             >
-              Cancel
+              취소
             </Button>
             <Button 
               type="submit" 
               disabled={isLoading}
-              className="bg-[hsl(var(--harvard-crimson))] hover:bg-[hsl(var(--harvard-crimson))]/90 font-semibold px-8"
+              className="bg-gradient-to-r from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] hover:shadow-xl font-bold px-8 transform hover:scale-105 transition-all"
             >
-              {isLoading ? "Creating..." : "Create Course"}
+              {isLoading ? "생성 중..." : "강의 개설"}
             </Button>
           </CardFooter>
         </form>

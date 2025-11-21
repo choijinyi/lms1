@@ -61,14 +61,21 @@ export default function CoursesPage() {
   }
 
   return (
-    <div className="container mx-auto py-12 space-y-8 min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <header className="pb-6 border-b-2 border-[hsl(var(--harvard-crimson))]">
-        <h1 className="text-5xl font-bold font-serif text-[hsl(var(--harvard-crimson))]">
-          Course Catalog
-        </h1>
-        <p className="text-gray-600 mt-2 text-lg">
-          Explore our comprehensive academic offerings
-        </p>
+    <div className="container mx-auto py-12 space-y-8 min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+      <header className="pb-6">
+        <div className="flex items-center gap-4 mb-4">
+          <div className="w-14 h-14 bg-gradient-to-br from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] rounded-xl flex items-center justify-center shadow-lg">
+            <span className="text-2xl font-bold text-white">O</span>
+          </div>
+          <div>
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] bg-clip-text text-transparent">
+              강의 목록
+            </h1>
+            <p className="text-gray-600 mt-1 text-lg">
+              다양한 학습 기회를 탐색하세요
+            </p>
+          </div>
+        </div>
       </header>
 
       <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
@@ -76,46 +83,46 @@ export default function CoursesPage() {
           const isEnrolled = enrolledCourseIds.has(course.id);
           
           return (
-            <Card key={course.id} className="flex flex-col border-2 border-gray-200 shadow-lg hover:shadow-xl transition-shadow bg-white">
-              <CardHeader className="space-y-3">
+            <Card key={course.id} className="flex flex-col border-2 border-blue-100 shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 bg-white">
+              <CardHeader className="space-y-3 bg-gradient-to-br from-blue-50 to-white">
                 <div className="flex justify-between items-start">
                   <Badge 
                     variant="secondary"
                     className={
                       course.difficulty === 'beginner' 
-                        ? 'bg-green-100 text-green-800 border-green-300' :
+                        ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-800 border-2 border-green-300 font-bold' :
                       course.difficulty === 'intermediate' 
-                        ? 'bg-blue-100 text-blue-800 border-blue-300' 
-                        : 'bg-purple-100 text-purple-800 border-purple-300'
+                        ? 'bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 border-2 border-blue-300 font-bold' 
+                        : 'bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 border-2 border-purple-300 font-bold'
                     }
                   >
-                    {course.difficulty === 'beginner' ? '100-200' : 
-                     course.difficulty === 'intermediate' ? '300' : '400+'}
+                    {course.difficulty === 'beginner' ? '기초' : 
+                     course.difficulty === 'intermediate' ? '중급' : '고급'}
                   </Badge>
-                  <span className="text-sm text-gray-600 font-semibold">{course.category}</span>
+                  <span className="text-sm text-gray-600 font-bold bg-white px-3 py-1 rounded-full border border-gray-200">{course.category}</span>
                 </div>
-                <CardTitle className="mt-2 text-xl font-serif text-[hsl(var(--harvard-black))] leading-tight">
+                <CardTitle className="mt-2 text-xl font-bold text-[hsl(var(--oikos-navy))] leading-tight">
                   {course.title}
                 </CardTitle>
                 <CardDescription className="line-clamp-3 text-gray-600">
-                  {course.description || "Course description not available."}
+                  {course.description || "강의 설명이 제공되지 않습니다."}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
                 {/* Additional course metadata could be displayed here */}
               </CardContent>
-              <CardFooter className="bg-gray-50 border-t border-gray-200">
+              <CardFooter className="bg-gradient-to-r from-blue-50 to-green-50 border-t-2 border-blue-100">
                 <Button 
                   className={
                     isEnrolled 
-                      ? "w-full border-2 border-gray-300 font-semibold" 
-                      : "w-full bg-[hsl(var(--harvard-crimson))] hover:bg-[hsl(var(--harvard-crimson))]/90 font-semibold shadow-md"
+                      ? "w-full border-2 border-gray-300 font-bold" 
+                      : "w-full bg-gradient-to-r from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))] hover:shadow-xl font-bold transform hover:scale-105 transition-all"
                   }
                   onClick={() => handleEnroll(course.id)}
                   disabled={isEnrolled || enroll.isPending}
                   variant={isEnrolled ? "outline" : "default"}
                 >
-                  {isEnrolled ? "Already Enrolled" : "Enroll Now"}
+                  {isEnrolled ? "수강 중" : "수강 신청"}
                 </Button>
               </CardFooter>
             </Card>
@@ -124,9 +131,9 @@ export default function CoursesPage() {
       </div>
       
       {coursesData?.courses.length === 0 && (
-        <div className="text-center py-20 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 bg-white">
-          <p className="text-xl font-serif">No courses available at this time</p>
-          <p className="text-sm text-gray-500 mt-2">Please check back later for new course offerings</p>
+        <div className="text-center py-20 border-2 border-dashed border-blue-300 rounded-2xl text-gray-500 bg-white">
+          <p className="text-2xl font-bold mb-2">개설된 강의가 없습니다</p>
+          <p className="text-sm text-gray-500">새로운 강의가 곧 추가될 예정입니다</p>
         </div>
       )}
     </div>

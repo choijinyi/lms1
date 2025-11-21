@@ -87,38 +87,39 @@
 
 @layer base {
   :root {
-    /* Harvard Crimson Theme */
+    /* OIKOS University Theme */
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 348 84% 35%; /* Harvard Crimson */
+    --primary: 214 95% 45%; /* OIKOS Blue */
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 348 84% 35%; /* Harvard Crimson */
+    --accent: 142 76% 36%; /* OIKOS Green */
     --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 348 84% 35%; /* Harvard Crimson */
-    --radius: 0.375rem; /* Slightly smaller for more classic look */
-    --chart-1: 348 84% 35%;
-    --chart-2: 210 50% 40%;
+    --ring: 214 95% 45%; /* OIKOS Blue */
+    --radius: 0.5rem;
+    --chart-1: 214 95% 45%;
+    --chart-2: 142 76% 36%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     
-    /* Harvard specific colors */
-    --harvard-crimson: 348 84% 35%;
-    --harvard-black: 0 0% 13%;
-    --harvard-gray: 0 1% 55%;
-    --harvard-light-gray: 0 0% 96%;
+    /* OIKOS specific colors */
+    --oikos-blue: 214 95% 45%;
+    --oikos-green: 142 76% 36%;
+    --oikos-navy: 220 30% 20%;
+    --oikos-light-blue: 210 100% 95%;
+    --oikos-gold: 45 100% 51%;
   }
 
   .dark {
@@ -154,19 +155,23 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-serif;
+    @apply bg-background text-foreground;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
+    @apply font-bold;
   }
   
-  /* Harvard classic styling */
-  .harvard-header {
-    @apply border-b-2 border-[hsl(var(--harvard-crimson))];
+  /* OIKOS modern styling */
+  .oikos-header {
+    @apply border-b-4 border-[hsl(var(--oikos-blue))];
   }
   
-  .harvard-card {
-    @apply border border-[hsl(var(--border))] shadow-sm hover:shadow-md transition-shadow;
+  .oikos-card {
+    @apply border-2 border-[hsl(var(--border))] rounded-lg shadow-sm hover:shadow-xl transition-all;
+  }
+  
+  .oikos-gradient {
+    @apply bg-gradient-to-br from-[hsl(var(--oikos-blue))] to-[hsl(var(--oikos-green))];
   }
 }
