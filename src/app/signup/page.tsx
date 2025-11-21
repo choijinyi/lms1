@@ -89,6 +89,19 @@ export default function SignupPage({ params }: SignupPageProps) {
           return;
         }
 
+        // If Supabase confirm email is disabled, we might not get a session immediately
+        // but we can try to sign in immediately.
+        const signInResult = await supabase.auth.signInWithPassword({
+          email: formState.email,
+          password: formState.password,
+        });
+
+        if (signInResult.data.session) {
+          await refresh();
+          router.replace(redirectedFrom);
+          return;
+        }
+
         setInfoMessage(
           "확인 이메일을 보냈습니다. 이메일 인증 후 로그인해 주세요."
         );
