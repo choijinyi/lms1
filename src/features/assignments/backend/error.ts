@@ -7,6 +7,7 @@ export const assignmentsErrorCodes = {
   unauthorized: 'ASSIGNMENTS_UNAUTHORIZED',
   notEnrolled: 'ASSIGNMENTS_NOT_ENROLLED',
   pastDueDate: 'ASSIGNMENTS_PAST_DUE_DATE',
+  invalidTransition: 'ASSIGNMENTS_INVALID_TRANSITION',
 } as const;
 
 export type AssignmentsServiceError = (typeof assignmentsErrorCodes)[keyof typeof assignmentsErrorCodes];

@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   CreateAssignmentInput,
   UpdateAssignmentInput,
+  UpdateAssignmentStatusInput,
   CreateSubmissionInput,
   GradeSubmissionInput,
   Assignment,
@@ -164,6 +165,66 @@ export const gradeSubmission = async (
   }
 
   return success(mapSubmission(data));
+};
+
+/**
+ * 과제 상태 전환 (게시/마감)
+ * 허용되는 전환:
+ * - draft → published
+ * - draft → closed
+ * - published → closed
+ */
+export const updateAssignmentStatus = async (
+  client: SupabaseClient,
+  assignmentId: string,
+  input: UpdateAssignmentStatusInput
+): Promise<HandlerResult<Assignment, AssignmentsServiceError, unknown>> => {
+  // 1. 과제 조회
+  const { data: assignment, error: fetchError } = await client
+    .from('assignments')
+    .select('*')
+    .eq('id', assignmentId)
+    .maybeSingle();
+
+  if (fetchError) {
+    return failure(500, assignmentsErrorCodes.createError, fetchError.message);
+  }
+
+  if (!assignment) {
+    return failure(404, assignmentsErrorCodes.notFound, 'Assignment not found');
+  }
+
+  // 2. 상태 전환 가능 여부 확인
+  const currentStatus = assignment.status;
+  const targetStatus = input.status;
+
+  const validTransitions: Record<string, string[]> = {
+    draft: ['published', 'closed'],
+    published: ['closed'],
+    closed: [], // closed에서는 전환 불가
+  };
+
+  if (!validTransitions[currentStatus]?.includes(targetStatus)) {
+    return failure(
+      400,
+      assignmentsErrorCodes.invalidTransition,
+      `Cannot transition from ${currentStatus} to ${targetStatus}`
+    );
+  }
+
+  // 3. 상태 업데이트
+  const { data, error } = await client
+    .from('assignments')
+    .update({ status: targetStatus })
+    .eq('id', assignmentId)
+    .select('*')
+    .single();
+
+  if (error) {
+    return failure(500, assignmentsErrorCodes.updateError, error.message);
+  }
+
+  return success(mapAssignment(data));
 };
 
 // --- Helpers ---

@@ -1,18 +1,48 @@
 "use client";
 
 import { useParams, Link } from "next/navigation";
-import { useAssignmentsQuery } from "@/features/assignments/hooks/useAssignmentHooks";
+import { useAssignmentsQuery, useAssignmentMutations } from "@/features/assignments/hooks/useAssignmentHooks";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Calendar, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CourseAssignmentsPage() {
   const params = useParams();
   const courseId = params.courseId as string;
   const { data, isLoading } = useAssignmentsQuery(courseId);
+  const { updateAssignmentStatus } = useAssignmentMutations();
+  const { toast } = useToast();
+
+  const handleStatusChange = async (assignmentId: string, status: 'published' | 'closed') => {
+    try {
+      await updateAssignmentStatus.mutateAsync({ assignmentId, input: { status } });
+      toast({
+        title: status === 'published' ? "과제가 게시되었습니다" : "과제가 마감되었습니다",
+        description: `성공적으로 ${status === 'published' ? '게시' : '마감'}되었습니다.`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "상태 변경 실패",
+        description: error.response?.data?.error?.message || "알 수 없는 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  };
 
   if (isLoading) return <div>로딩 중...</div>;
 
@@ -51,9 +81,65 @@ export default function CourseAssignmentsPage() {
                 </div>
               </div>
               <div className="flex gap-2">
-                {/* TODO: 채점 페이지 링크 */}
-                <Button variant="outline" size="sm">제출물 확인 / 채점</Button>
+                <Link href={`/instructor/courses/${courseId}/assignments/${assignment.id}`}>
+                  <Button variant="outline" size="sm">제출물 확인 / 채점</Button>
+                </Link>
                 <Button variant="ghost" size="sm">수정</Button>
+
+                {/* 상태 전환 버튼 */}
+                {assignment.status === 'draft' && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="default" size="sm" className="bg-green-600 hover:bg-green-700">
+                        게시하기
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>과제를 게시하시겠습니까?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          게시하면 학습자들이 과제를 확인하고 제출할 수 있습니다.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>취소</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleStatusChange(assignment.id, 'published')}
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          게시
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
+
+                {assignment.status === 'published' && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" size="sm">
+                        마감하기
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>과제를 마감하시겠습니까?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          마감 후 학습자는 더 이상 제출할 수 없습니다. 이 작업은 되돌릴 수 없습니다.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>취소</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleStatusChange(assignment.id, 'closed')}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          마감
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
               </div>
             </CardContent>
           </Card>

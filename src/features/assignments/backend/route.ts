@@ -8,11 +8,13 @@ import {
   createSubmission,
   getSubmissionsByAssignment,
   gradeSubmission,
+  updateAssignmentStatus,
 } from './service';
 import {
   CreateAssignmentInputSchema,
   CreateSubmissionInputSchema,
   GradeSubmissionInputSchema,
+  UpdateAssignmentStatusInputSchema,
 } from './schema';
 
 export const registerAssignmentsRoutes = (app: Hono<AppEnv>) => {
@@ -73,6 +75,20 @@ export const registerAssignmentsRoutes = (app: Hono<AppEnv>) => {
       const input = c.req.valid('json');
       const supabase = c.get('supabase');
       const result = await gradeSubmission(supabase, id, input);
+      return respond(c, result);
+    }
+  );
+
+  // 과제 상태 전환 (게시/마감)
+  app.patch(
+    `${basePath}/:id/status`,
+    zValidator('json', UpdateAssignmentStatusInputSchema),
+    async (c) => {
+      const id = c.req.param('id');
+      const input = c.req.valid('json');
+      const supabase = c.get('supabase');
+      // TODO: Permission check (is instructor of course)
+      const result = await updateAssignmentStatus(supabase, id, input);
       return respond(c, result);
     }
   );

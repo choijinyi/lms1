@@ -6,6 +6,7 @@ import {
   type CreateAssignmentInput,
   type CreateSubmissionInput,
   type GradeSubmissionInput,
+  type UpdateAssignmentStatusInput,
 } from '../lib/dto';
 
 export const useAssignmentsQuery = (courseId: string) => {
@@ -65,6 +66,17 @@ export const useAssignmentMutations = () => {
     },
   });
 
-  return { createAssignment, submitAssignment, gradeSubmission };
+  const updateAssignmentStatus = useMutation({
+    mutationFn: async ({ assignmentId, input }: { assignmentId: string; input: UpdateAssignmentStatusInput }) => {
+      const { data } = await apiClient.patch(`/api/assignments/${assignmentId}/status`, input);
+      return data;
+    },
+    onSuccess: () => {
+      // Invalidate assignments list
+      queryClient.invalidateQueries({ queryKey: ['assignments'] });
+    },
+  });
+
+  return { createAssignment, submitAssignment, gradeSubmission, updateAssignmentStatus };
 };
 

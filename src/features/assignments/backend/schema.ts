@@ -34,6 +34,11 @@ export type CreateAssignmentInput = z.infer<typeof CreateAssignmentInputSchema>;
 export const UpdateAssignmentInputSchema = CreateAssignmentInputSchema.partial().omit({ courseId: true });
 export type UpdateAssignmentInput = z.infer<typeof UpdateAssignmentInputSchema>;
 
+export const UpdateAssignmentStatusInputSchema = z.object({
+  status: z.enum(['published', 'closed']),
+});
+export type UpdateAssignmentStatusInput = z.infer<typeof UpdateAssignmentStatusInputSchema>;
+
 
 // --- Submission Schemas ---
 
