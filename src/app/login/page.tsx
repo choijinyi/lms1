@@ -77,108 +77,124 @@ export default function LoginPage({ params }: LoginPageProps) {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col items-center justify-center gap-10 px-6 py-16">
-      <header className="flex flex-col items-center gap-3 text-center">
-        <h1 className="text-3xl font-semibold">로그인</h1>
-        <p className="text-slate-500">
-          Supabase 계정으로 로그인하고 보호된 페이지에 접근하세요.
+    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center gap-12 px-6 py-16 bg-gradient-to-b from-white to-gray-50">
+      <header className="flex flex-col items-center gap-4 text-center">
+        <div className="w-20 h-20 bg-[hsl(var(--harvard-crimson))] rounded-full flex items-center justify-center mb-2">
+          <span className="text-4xl font-bold text-white font-serif">H</span>
+        </div>
+        <h1 className="text-5xl font-bold text-[hsl(var(--harvard-crimson))] font-serif tracking-tight">
+          Harvard Portal
+        </h1>
+        <p className="text-gray-600 text-lg max-w-md">
+          Enter your credentials to access the academic portal
         </p>
       </header>
-      
-      <div className="grid w-full gap-8 md:grid-cols-2">
-        <div className="flex flex-col gap-6">
-          <Tabs defaultValue="student" onValueChange={(val) => setLoginType(val as any)} className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="student">
-                <User className="mr-2 h-4 w-4" />
-                학생
-              </TabsTrigger>
-              <TabsTrigger value="instructor">
-                <GraduationCap className="mr-2 h-4 w-4" />
-                강사
-              </TabsTrigger>
-              <TabsTrigger value="operator">
-                <ShieldCheck className="mr-2 h-4 w-4" />
-                관리자
-              </TabsTrigger>
-            </TabsList>
-            
-            <div className="mt-4">
-              <p className="text-sm text-muted-foreground text-center mb-4">
-                {loginType === "student" && "학습자 계정으로 로그인합니다."}
-                {loginType === "instructor" && "강사 계정으로 로그인하여 코스를 관리합니다."}
-                {loginType === "operator" && "관리자 계정으로 시스템을 관리합니다."}
-              </p>
-            </div>
-          </Tabs>
+        
+        <div className="grid w-full gap-10 md:grid-cols-2 max-w-4xl">
+          <div className="flex flex-col gap-6">
+            <Tabs defaultValue="student" onValueChange={(val) => setLoginType(val as any)} className="w-full">
+              <TabsList className="grid w-full grid-cols-3 bg-gray-100 p-1 rounded-lg">
+                <TabsTrigger 
+                  value="student" 
+                  className="data-[state=active]:bg-[hsl(var(--harvard-crimson))] data-[state=active]:text-white font-semibold"
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  Student
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="instructor"
+                  className="data-[state=active]:bg-[hsl(var(--harvard-crimson))] data-[state=active]:text-white font-semibold"
+                >
+                  <GraduationCap className="mr-2 h-4 w-4" />
+                  Faculty
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="operator"
+                  className="data-[state=active]:bg-[hsl(var(--harvard-crimson))] data-[state=active]:text-white font-semibold"
+                >
+                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  Admin
+                </TabsTrigger>
+              </TabsList>
+              
+              <div className="mt-4">
+                <p className="text-sm text-gray-600 text-center mb-4 italic">
+                  {loginType === "student" && "Access your courses and academic progress"}
+                  {loginType === "instructor" && "Manage courses and evaluate student work"}
+                  {loginType === "operator" && "Administer the academic system"}
+                </p>
+              </div>
+            </Tabs>
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-4 rounded-xl border border-slate-200 p-6 shadow-sm"
-          >
-            <label className="flex flex-col gap-2 text-sm text-slate-700">
-              이메일
-              <input
-                type="email"
-                name="email"
-                autoComplete="email"
-                required
-                value={formState.email}
-                onChange={handleChange}
-                className="rounded-md border border-slate-300 px-3 py-2 focus:border-slate-500 focus:outline-none"
-              />
-            </label>
-            <label className="flex flex-col gap-2 text-sm text-slate-700">
-              비밀번호
-              <input
-                type="password"
-                name="password"
-                autoComplete="current-password"
-                required
-                value={formState.password}
-                onChange={handleChange}
-                className="rounded-md border border-slate-300 px-3 py-2 focus:border-slate-500 focus:outline-none"
-              />
-            </label>
-            {errorMessage ? (
-              <p className="text-sm text-rose-500">{errorMessage}</p>
-            ) : null}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-5 rounded-lg border-2 border-gray-200 p-8 shadow-lg bg-white"
             >
-              {isSubmitting ? "로그인 중" : "로그인"}
-            </button>
-            <p className="text-xs text-slate-500">
-              계정이 없으신가요?{" "}
-              <Link
-                href="/signup"
-                className="font-medium text-slate-700 underline hover:text-slate-900"
+              <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
+                Email Address
+                <input
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  required
+                  value={formState.email}
+                  onChange={handleChange}
+                  className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
+                  placeholder="your.email@harvard.edu"
+                />
+              </label>
+              <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
+                Password
+                <input
+                  type="password"
+                  name="password"
+                  autoComplete="current-password"
+                  required
+                  value={formState.password}
+                  onChange={handleChange}
+                  className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
+                  placeholder="••••••••"
+                />
+              </label>
+              {errorMessage ? (
+                <p className="text-sm text-rose-600 bg-rose-50 p-3 rounded-md border border-rose-200">{errorMessage}</p>
+              ) : null}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="rounded-md bg-[hsl(var(--harvard-crimson))] px-4 py-3 text-base font-semibold text-white transition hover:bg-[hsl(var(--harvard-crimson))]/90 disabled:cursor-not-allowed disabled:bg-gray-400 shadow-md hover:shadow-lg"
               >
-                회원가입
-              </Link>
-            </p>
-          </form>
-        </div>
+                {isSubmitting ? "Signing in..." : "Sign In"}
+              </button>
+              <p className="text-sm text-gray-600 text-center">
+                Don't have an account?{" "}
+                <Link
+                  href="/signup"
+                  className="font-semibold text-[hsl(var(--harvard-crimson))] hover:underline"
+                >
+                  Register
+                </Link>
+              </p>
+            </form>
+          </div>
 
-        <figure className="overflow-hidden rounded-xl border border-slate-200">
-          <Image
-            src={
-              loginType === "instructor" 
-                ? "https://picsum.photos/seed/instructor/640/640" 
-                : loginType === "operator"
-                ? "https://picsum.photos/seed/operator/640/640"
-                : "https://picsum.photos/seed/login/640/640"
-            }
-            alt="로그인"
-            width={640}
-            height={640}
-            className="h-full w-full object-cover transition-all duration-500"
-            priority
-          />
-        </figure>
-      </div>
+          <figure className="overflow-hidden rounded-lg border-2 border-gray-200 shadow-xl">
+            <Image
+              src={
+                loginType === "instructor" 
+                  ? "https://picsum.photos/seed/harvard-faculty/640/640" 
+                  : loginType === "operator"
+                  ? "https://picsum.photos/seed/harvard-admin/640/640"
+                  : "https://picsum.photos/seed/harvard-campus/640/640"
+              }
+              alt="Harvard Campus"
+              width={640}
+              height={640}
+              className="h-full w-full object-cover transition-all duration-500 hover:scale-105"
+              priority
+            />
+          </figure>
+        </div>
     </div>
   );
 }

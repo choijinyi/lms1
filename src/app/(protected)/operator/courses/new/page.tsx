@@ -91,71 +91,123 @@ export default function OperatorCreateCoursePage() {
   };
 
   return (
-    <div className="container mx-auto py-10 max-w-2xl">
-      <Card>
-        <CardHeader>
-          <CardTitle>수강과목 개설 (관리자)</CardTitle>
-          <CardDescription>과목명과 담당 교수를 지정하여 새 강의를 개설합니다.</CardDescription>
+    <div className="container mx-auto py-12 max-w-3xl min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <div className="mb-8 pb-6 border-b-2 border-[hsl(var(--harvard-crimson))]">
+        <h1 className="text-4xl font-bold font-serif text-[hsl(var(--harvard-crimson))] mb-2">
+          Create New Course
+        </h1>
+        <p className="text-gray-600">Administrative Portal - Course Management</p>
+      </div>
+      
+      <Card className="border-2 border-gray-200 shadow-xl">
+        <CardHeader className="bg-gray-50 border-b-2 border-gray-200">
+          <CardTitle className="text-2xl font-serif text-[hsl(var(--harvard-black))]">
+            Course Details
+          </CardTitle>
+          <CardDescription className="text-gray-600">
+            Enter the course information and assign a faculty member
+          </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="title">과목명</Label>
-              <Input id="title" name="title" required placeholder="예: 운영체제" />
+          <CardContent className="space-y-7 pt-8">
+            <div className="space-y-3">
+              <Label htmlFor="title" className="text-base font-semibold text-gray-700">
+                Course Title *
+              </Label>
+              <Input 
+                id="title" 
+                name="title" 
+                required 
+                placeholder="e.g., Introduction to Computer Science" 
+                className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base py-3"
+              />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="instructorId">담당 교수</Label>
+            <div className="space-y-3">
+              <Label htmlFor="instructorId" className="text-base font-semibold text-gray-700">
+                Faculty Member *
+              </Label>
               <Select name="instructorId" required>
-                <SelectTrigger>
-                  <SelectValue placeholder="교수 선택" />
+                <SelectTrigger className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base py-3">
+                  <SelectValue placeholder="Select faculty member" />
                 </SelectTrigger>
                 <SelectContent>
                   {instructors.map((inst) => (
-                    <SelectItem key={inst.id} value={inst.id}>
+                    <SelectItem key={inst.id} value={inst.id} className="text-base py-2">
                       {inst.name}
                     </SelectItem>
                   ))}
                   {instructors.length === 0 && (
-                    <SelectItem value="disabled" disabled>등록된 강사가 없습니다</SelectItem>
+                    <SelectItem value="disabled" disabled>No faculty members registered</SelectItem>
                   )}
                 </SelectContent>
               </Select>
-              <p className="text-xs text-muted-foreground">
-                * 목록에 교수가 없다면 먼저 강사 계정이 생성되어야 합니다.
-              </p>
+              {instructors.length === 0 && (
+                <p className="text-sm text-amber-600 bg-amber-50 p-3 rounded-md border border-amber-200">
+                  ⚠️ Please ensure faculty accounts are created before adding courses
+                </p>
+              )}
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="description">설명</Label>
-              <Textarea id="description" name="description" placeholder="과목에 대한 설명을 입력하세요." />
+            <div className="space-y-3">
+              <Label htmlFor="description" className="text-base font-semibold text-gray-700">
+                Course Description
+              </Label>
+              <Textarea 
+                id="description" 
+                name="description" 
+                placeholder="Provide a comprehensive description of the course objectives, content, and requirements" 
+                className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base min-h-32"
+                rows={5}
+              />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="category">카테고리 / 학부</Label>
-                <Input id="category" name="category" required placeholder="예: 컴퓨터공학부" />
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <Label htmlFor="category" className="text-base font-semibold text-gray-700">
+                  Department *
+                </Label>
+                <Input 
+                  id="category" 
+                  name="category" 
+                  required 
+                  placeholder="e.g., Computer Science" 
+                  className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base py-3"
+                />
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="difficulty">난이도 (학년)</Label>
+              <div className="space-y-3">
+                <Label htmlFor="difficulty" className="text-base font-semibold text-gray-700">
+                  Level *
+                </Label>
                 <Select name="difficulty" required defaultValue="beginner">
-                  <SelectTrigger>
-                    <SelectValue placeholder="난이도 선택" />
+                  <SelectTrigger className="border-2 border-gray-300 focus:border-[hsl(var(--harvard-crimson))] text-base py-3">
+                    <SelectValue placeholder="Select level" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="beginner">1-2학년 (Beginner)</SelectItem>
-                    <SelectItem value="intermediate">3학년 (Intermediate)</SelectItem>
-                    <SelectItem value="advanced">4학년 (Advanced)</SelectItem>
+                    <SelectItem value="beginner" className="text-base py-2">Introductory (100-200)</SelectItem>
+                    <SelectItem value="intermediate" className="text-base py-2">Intermediate (300)</SelectItem>
+                    <SelectItem value="advanced" className="text-base py-2">Advanced (400+)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-end gap-2">
-            <Button type="button" variant="ghost" onClick={() => router.back()}>취소</Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "생성 중..." : "과목 개설"}
+          <CardFooter className="flex justify-end gap-3 bg-gray-50 border-t-2 border-gray-200 py-5">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => router.back()}
+              className="border-2 border-gray-300 font-semibold"
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              disabled={isLoading}
+              className="bg-[hsl(var(--harvard-crimson))] hover:bg-[hsl(var(--harvard-crimson))]/90 font-semibold px-8"
+            >
+              {isLoading ? "Creating..." : "Create Course"}
             </Button>
           </CardFooter>
         </form>

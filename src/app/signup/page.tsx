@@ -121,20 +121,25 @@ export default function SignupPage({ params }: SignupPageProps) {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col items-center justify-center gap-10 px-6 py-16">
-      <header className="flex flex-col items-center gap-3 text-center">
-        <h1 className="text-3xl font-semibold">회원가입</h1>
-        <p className="text-slate-500">
-          Supabase 계정으로 회원가입하고 프로젝트를 시작하세요.
+    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center gap-12 px-6 py-16 bg-gradient-to-b from-white to-gray-50">
+      <header className="flex flex-col items-center gap-4 text-center">
+        <div className="w-20 h-20 bg-[hsl(var(--harvard-crimson))] rounded-full flex items-center justify-center mb-2">
+          <span className="text-4xl font-bold text-white font-serif">H</span>
+        </div>
+        <h1 className="text-5xl font-bold text-[hsl(var(--harvard-crimson))] font-serif tracking-tight">
+          Join Harvard Portal
+        </h1>
+        <p className="text-gray-600 text-lg max-w-md">
+          Create your account to access the academic portal
         </p>
       </header>
-      <div className="grid w-full gap-8 md:grid-cols-2">
+      <div className="grid w-full gap-10 md:grid-cols-2 max-w-4xl">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 rounded-xl border border-slate-200 p-6 shadow-sm"
+          className="flex flex-col gap-5 rounded-lg border-2 border-gray-200 p-8 shadow-lg bg-white"
         >
-          <label className="flex flex-col gap-2 text-sm text-slate-700">
-            이메일
+          <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
+            Email Address
             <input
               type="email"
               name="email"
@@ -142,11 +147,12 @@ export default function SignupPage({ params }: SignupPageProps) {
               required
               value={formState.email}
               onChange={handleChange}
-              className="rounded-md border border-slate-300 px-3 py-2 focus:border-slate-500 focus:outline-none"
+              className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
+              placeholder="your.email@harvard.edu"
             />
           </label>
-          <label className="flex flex-col gap-2 text-sm text-slate-700">
-            비밀번호
+          <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
+            Password
             <input
               type="password"
               name="password"
@@ -154,11 +160,12 @@ export default function SignupPage({ params }: SignupPageProps) {
               required
               value={formState.password}
               onChange={handleChange}
-              className="rounded-md border border-slate-300 px-3 py-2 focus:border-slate-500 focus:outline-none"
+              className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
+              placeholder="••••••••"
             />
           </label>
-          <label className="flex flex-col gap-2 text-sm text-slate-700">
-            비밀번호 확인
+          <label className="flex flex-col gap-2 text-sm text-gray-700 font-medium">
+            Confirm Password
             <input
               type="password"
               name="confirmPassword"
@@ -166,39 +173,40 @@ export default function SignupPage({ params }: SignupPageProps) {
               required
               value={formState.confirmPassword}
               onChange={handleChange}
-              className="rounded-md border border-slate-300 px-3 py-2 focus:border-slate-500 focus:outline-none"
+              className="rounded-md border-2 border-gray-300 px-4 py-3 focus:border-[hsl(var(--harvard-crimson))] focus:outline-none transition-colors font-sans"
+              placeholder="••••••••"
             />
           </label>
           {errorMessage ? (
-            <p className="text-sm text-rose-500">{errorMessage}</p>
+            <p className="text-sm text-rose-600 bg-rose-50 p-3 rounded-md border border-rose-200">{errorMessage}</p>
           ) : null}
           {infoMessage ? (
-            <p className="text-sm text-emerald-600">{infoMessage}</p>
+            <p className="text-sm text-emerald-600 bg-emerald-50 p-3 rounded-md border border-emerald-200">{infoMessage}</p>
           ) : null}
           <button
             type="submit"
             disabled={isSubmitting || isSubmitDisabled}
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+            className="rounded-md bg-[hsl(var(--harvard-crimson))] px-4 py-3 text-base font-semibold text-white transition hover:bg-[hsl(var(--harvard-crimson))]/90 disabled:cursor-not-allowed disabled:bg-gray-400 shadow-md hover:shadow-lg"
           >
-            {isSubmitting ? "등록 중" : "회원가입"}
+            {isSubmitting ? "Creating Account..." : "Create Account"}
           </button>
-          <p className="text-xs text-slate-500">
-            이미 계정이 있으신가요?{" "}
+          <p className="text-sm text-gray-600 text-center">
+            Already have an account?{" "}
             <Link
               href="/login"
-              className="font-medium text-slate-700 underline hover:text-slate-900"
+              className="font-semibold text-[hsl(var(--harvard-crimson))] hover:underline"
             >
-              로그인으로 이동
+              Sign In
             </Link>
           </p>
         </form>
-        <figure className="overflow-hidden rounded-xl border border-slate-200">
+        <figure className="overflow-hidden rounded-lg border-2 border-gray-200 shadow-xl">
           <Image
-            src="https://picsum.photos/seed/signup/640/640"
-            alt="회원가입"
+            src="https://picsum.photos/seed/harvard-library/640/640"
+            alt="Harvard Campus"
             width={640}
             height={640}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover hover:scale-105 transition-all duration-500"
             priority
           />
         </figure>

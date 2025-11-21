@@ -27,90 +27,105 @@ export default function DashboardPage({ params }: DashboardPageProps) {
   const { data: myEnrollments, isLoading } = useMyEnrollmentsQuery();
 
   return (
-    <div className="container mx-auto flex max-w-5xl flex-col gap-8 px-6 py-12">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">학습 대시보드</h1>
-        <p className="text-slate-500">
-          {user?.email ?? "사용자"}님, 오늘도 즐거운 학습 되세요!
+    <div className="container mx-auto flex max-w-6xl flex-col gap-10 px-6 py-12 bg-gradient-to-b from-white to-gray-50 min-h-screen">
+      <header className="space-y-3 pb-6 border-b-2 border-[hsl(var(--harvard-crimson))]">
+        <h1 className="text-5xl font-bold tracking-tight text-[hsl(var(--harvard-crimson))] font-serif">
+          Student Dashboard
+        </h1>
+        <p className="text-gray-600 text-lg">
+          Welcome back, <span className="font-semibold">{user?.email ?? "Student"}</span>
         </p>
       </header>
 
-      {/* 주요 액션 버튼 */}
-      <section className="grid gap-4 md:grid-cols-3">
-        <Card className="bg-primary/5 border-primary/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Search className="h-5 w-5 text-primary" />
-              코스 찾기
+      {/* Quick Actions */}
+      <section className="grid gap-6 md:grid-cols-3">
+        <Card className="bg-[hsl(var(--harvard-crimson))]/5 border-2 border-[hsl(var(--harvard-crimson))]/20 shadow-lg hover:shadow-xl transition-shadow">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl flex items-center gap-2 font-serif">
+              <Search className="h-6 w-6 text-[hsl(var(--harvard-crimson))]" />
+              Browse Courses
             </CardTitle>
-            <CardDescription>새로운 배움을 시작해보세요.</CardDescription>
+            <CardDescription className="text-gray-600">Discover new areas of study</CardDescription>
           </CardHeader>
           <CardFooter>
             <Link href="/courses" className="w-full">
-              <Button className="w-full">전체 코스 보기</Button>
+              <Button className="w-full bg-[hsl(var(--harvard-crimson))] hover:bg-[hsl(var(--harvard-crimson))]/90 font-semibold">
+                View All Courses
+              </Button>
             </Link>
           </CardFooter>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-primary" />
-              내 강의실
+        <Card className="border-2 border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl flex items-center gap-2 font-serif">
+              <BookOpen className="h-6 w-6 text-[hsl(var(--harvard-crimson))]" />
+              My Courses
             </CardTitle>
-            <CardDescription>수강 중인 코스를 이어 학습하세요.</CardDescription>
+            <CardDescription className="text-gray-600">Continue your learning journey</CardDescription>
           </CardHeader>
           <CardFooter>
             <Link href="/my-courses" className="w-full">
-              <Button variant="outline" className="w-full">내 학습 현황</Button>
+              <Button variant="outline" className="w-full border-2 border-[hsl(var(--harvard-crimson))] text-[hsl(var(--harvard-crimson))] hover:bg-[hsl(var(--harvard-crimson))]/5 font-semibold">
+                View Progress
+              </Button>
             </Link>
           </CardFooter>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <GraduationCap className="h-5 w-5 text-primary" />
-              수료증
+        <Card className="border-2 border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-xl flex items-center gap-2 font-serif">
+              <GraduationCap className="h-6 w-6 text-[hsl(var(--harvard-crimson))]" />
+              Certificates
             </CardTitle>
-            <CardDescription>완료한 코스의 수료증을 확인하세요.</CardDescription>
+            <CardDescription className="text-gray-600">View your achievements</CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button variant="ghost" className="w-full" disabled>준비 중</Button>
+            <Button variant="ghost" className="w-full font-semibold" disabled>Coming Soon</Button>
           </CardFooter>
         </Card>
       </section>
 
-      {/* 최근 수강 코스 요약 */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">최근 수강 신청 내역</h2>
-          <Link href="/my-courses" className="text-sm text-primary hover:underline">
-            전체 보기
+      {/* Recent Enrollments */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between border-b-2 border-gray-200 pb-3">
+          <h2 className="text-3xl font-bold font-serif text-[hsl(var(--harvard-black))]">
+            Recent Enrollments
+          </h2>
+          <Link href="/my-courses" className="text-sm text-[hsl(var(--harvard-crimson))] hover:underline font-semibold">
+            View All →
           </Link>
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid gap-5">
           {isLoading ? (
-            <div className="text-center py-8 text-muted-foreground">로딩 중...</div>
+            <div className="text-center py-12 text-gray-500 bg-white rounded-lg border-2 border-gray-200 shadow-sm">
+              Loading your courses...
+            </div>
           ) : myEnrollments?.enrollments.length === 0 ? (
-            <div className="text-center py-12 border rounded-lg bg-muted/10 text-muted-foreground">
-              <p className="mb-4">아직 수강 중인 코스가 없습니다.</p>
+            <div className="text-center py-16 border-2 border-dashed border-gray-300 rounded-lg bg-white text-gray-600">
+              <BookOpen className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+              <p className="mb-4 text-lg font-serif">No courses enrolled yet</p>
               <Link href="/courses">
-                <Button variant="outline">코스 둘러보기</Button>
+                <Button variant="outline" className="border-2 border-[hsl(var(--harvard-crimson))] text-[hsl(var(--harvard-crimson))] hover:bg-[hsl(var(--harvard-crimson))]/5 font-semibold">
+                  Explore Courses
+                </Button>
               </Link>
             </div>
           ) : (
             myEnrollments?.enrollments.slice(0, 3).map((enrollment) => (
-              <Card key={enrollment.id} className="flex flex-row items-center justify-between p-4">
-                <div className="flex flex-col gap-1">
-                  <span className="font-medium">코스 ID: {enrollment.courseId}</span>
-                  <span className="text-xs text-muted-foreground">
-                    신청일: {format(new Date(enrollment.enrolledAt), "PPP", { locale: ko })}
+              <Card key={enrollment.id} className="flex flex-row items-center justify-between p-6 border-2 border-gray-200 shadow-md hover:shadow-lg transition-shadow">
+                <div className="flex flex-col gap-2">
+                  <span className="font-semibold text-lg font-serif">Course ID: {enrollment.courseId}</span>
+                  <span className="text-sm text-gray-600">
+                    Enrolled: {format(new Date(enrollment.enrolledAt), "PPP", { locale: ko })}
                   </span>
                 </div>
                 <Link href={`/courses/${enrollment.courseId}`}>
-                  <Button variant="secondary" size="sm">학습하기</Button>
+                  <Button variant="default" size="sm" className="bg-[hsl(var(--harvard-crimson))] hover:bg-[hsl(var(--harvard-crimson))]/90 font-semibold">
+                    Continue Learning
+                  </Button>
                 </Link>
               </Card>
             ))
