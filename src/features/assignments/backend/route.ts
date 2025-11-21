@@ -9,12 +9,14 @@ import {
   getSubmissionsByAssignment,
   gradeSubmission,
   updateAssignmentStatus,
+  updateAssignment,
 } from './service';
 import {
   CreateAssignmentInputSchema,
   CreateSubmissionInputSchema,
   GradeSubmissionInputSchema,
   UpdateAssignmentStatusInputSchema,
+  UpdateAssignmentInputSchema,
 } from './schema';
 
 export const registerAssignmentsRoutes = (app: Hono<AppEnv>) => {
@@ -89,6 +91,23 @@ export const registerAssignmentsRoutes = (app: Hono<AppEnv>) => {
       const supabase = c.get('supabase');
       // TODO: Permission check (is instructor of course)
       const result = await updateAssignmentStatus(supabase, id, input);
+      return respond(c, result);
+    }
+  );
+
+  // 과제 수정 (강사만 가능)
+  app.patch(
+    `${basePath}/:id`,
+    zValidator('json', UpdateAssignmentInputSchema),
+    async (c) => {
+      const id = c.req.param('id');
+      const input = c.req.valid('json');
+      const supabase = c.get('supabase');
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return c.json({ error: 'Unauthorized' }, 401);
+
+      const result = await updateAssignment(supabase, id, user.id, input);
       return respond(c, result);
     }
   );

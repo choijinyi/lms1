@@ -227,6 +227,60 @@ export const updateAssignmentStatus = async (
   return success(mapAssignment(data));
 };
 
+/**
+ * 과제 수정 (Instructor only)
+ */
+export const updateAssignment = async (
+  client: SupabaseClient,
+  assignmentId: string,
+  instructorId: string,
+  input: UpdateAssignmentInput
+): Promise<HandlerResult<Assignment, AssignmentsServiceError, unknown>> => {
+  // 1. 과제 조회 및 권한 확인
+  const { data: assignment, error: fetchError } = await client
+    .from('assignments')
+    .select('*, courses!inner(instructor_id)')
+    .eq('id', assignmentId)
+    .maybeSingle();
+
+  if (fetchError) {
+    return failure(500, assignmentsErrorCodes.updateError, fetchError.message);
+  }
+
+  if (!assignment) {
+    return failure(404, assignmentsErrorCodes.notFound, 'Assignment not found');
+  }
+
+  // @ts-ignore - courses is joined
+  if (assignment.courses.instructor_id !== instructorId) {
+    return failure(403, assignmentsErrorCodes.unauthorized, 'You are not the instructor of this course');
+  }
+
+  // 2. 업데이트할 필드 구성
+  const updateData: any = {};
+  if (input.title !== undefined) updateData.title = input.title;
+  if (input.description !== undefined) updateData.description = input.description;
+  if (input.dueDate !== undefined) updateData.due_date = input.dueDate;
+  if (input.weight !== undefined) updateData.weight = input.weight;
+  if (input.allowLate !== undefined) updateData.allow_late = input.allowLate;
+  if (input.allowResubmit !== undefined) updateData.allow_resubmit = input.allowResubmit;
+  if (input.status !== undefined) updateData.status = input.status;
+
+  // 3. 과제 업데이트
+  const { data, error } = await client
+    .from('assignments')
+    .update(updateData)
+    .eq('id', assignmentId)
+    .select('*')
+    .single();
+
+  if (error) {
+    return failure(500, assignmentsErrorCodes.updateError, error.message);
+  }
+
+  return success(mapAssignment(data));
+};
+
 // --- Helpers ---
 
 function mapAssignment(data: any): Assignment {

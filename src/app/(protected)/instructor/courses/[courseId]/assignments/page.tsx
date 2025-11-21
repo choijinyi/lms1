@@ -4,7 +4,7 @@ import { useParams, Link } from "next/navigation";
 import { useAssignmentsQuery, useAssignmentMutations } from "@/features/assignments/hooks/useAssignmentHooks";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Calendar, Clock } from "lucide-react";
+import { Plus, Calendar, Clock, Settings } from "lucide-react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
@@ -84,7 +84,12 @@ export default function CourseAssignmentsPage() {
                 <Link href={`/instructor/courses/${courseId}/assignments/${assignment.id}`}>
                   <Button variant="outline" size="sm">제출물 확인 / 채점</Button>
                 </Link>
-                <Button variant="ghost" size="sm">수정</Button>
+                <Link href={`/instructor/courses/${courseId}/assignments/${assignment.id}/edit`}>
+                  <Button variant="ghost" size="sm">
+                    <Settings className="mr-2 h-4 w-4" />
+                    수정
+                  </Button>
+                </Link>
 
                 {/* 상태 전환 버튼 */}
                 {assignment.status === 'draft' && (

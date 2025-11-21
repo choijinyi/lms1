@@ -3,10 +3,12 @@ import { apiClient } from '@/lib/remote/api-client';
 import {
   AssignmentListResponseSchema,
   SubmissionListResponseSchema,
+  AssignmentSchema,
   type CreateAssignmentInput,
   type CreateSubmissionInput,
   type GradeSubmissionInput,
   type UpdateAssignmentStatusInput,
+  type UpdateAssignmentInput,
 } from '../lib/dto';
 
 export const useAssignmentsQuery = (courseId: string) => {
@@ -77,6 +79,18 @@ export const useAssignmentMutations = () => {
     },
   });
 
-  return { createAssignment, submitAssignment, gradeSubmission, updateAssignmentStatus };
+  const updateAssignment = useMutation({
+    mutationFn: async ({ assignmentId, input }: { assignmentId: string; input: UpdateAssignmentInput }) => {
+      const { data } = await apiClient.patch(`/api/assignments/${assignmentId}`, input);
+      return AssignmentSchema.parse(data);
+    },
+    onSuccess: (data) => {
+      // Invalidate assignments list and specific assignment
+      queryClient.invalidateQueries({ queryKey: ['assignments'] });
+      queryClient.invalidateQueries({ queryKey: ['assignment', data.id] });
+    },
+  });
+
+  return { createAssignment, submitAssignment, gradeSubmission, updateAssignmentStatus, updateAssignment };
 };
 
