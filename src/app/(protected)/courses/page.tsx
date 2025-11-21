@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function CoursesPage() {
   const [page, setPage] = useState(1);
-  const { data: coursesData, isLoading: isCoursesLoading } = useCoursesQuery({
+  const { data: coursesData, isLoading: isCoursesLoading, isError: isCoursesError } = useCoursesQuery({
     page,
     limit: 9,
     status: "published",
@@ -50,6 +50,14 @@ export default function CoursesPage() {
 
   if (isCoursesLoading || isEnrollmentsLoading) {
     return <div className="p-8 text-center">로딩 중...</div>;
+  }
+
+  if (isCoursesError) {
+    return (
+      <div className="container mx-auto py-8 text-center">
+        <p className="text-red-500">코스 목록을 불러오는데 실패했습니다.</p>
+      </div>
+    );
   }
 
   return (
