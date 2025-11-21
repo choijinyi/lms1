@@ -30,7 +30,13 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
 
       // 2. 강사 전용 페이지 접근 제어
       if (pathname.startsWith("/instructor") && role !== "instructor") {
-        router.replace("/dashboard"); // 권한 없음 -> 기본 대시보드로
+        router.replace("/dashboard");
+        return;
+      }
+
+      // 3. 관리자(Operator) 전용 페이지 접근 제어
+      if (pathname.startsWith("/operator") && role !== "operator") {
+        router.replace("/dashboard");
         return;
       }
     }
@@ -40,10 +46,9 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
     return null;
   }
 
-  // 권한 체크 중 깜빡임 방지 (간단한 처리)
-  if (pathname.startsWith("/instructor") && role !== "instructor") {
-    return null;
-  }
+  // 권한 체크 중 깜빡임 방지
+  if (pathname.startsWith("/instructor") && role !== "instructor") return null;
+  if (pathname.startsWith("/operator") && role !== "operator") return null;
 
   return <>{children}</>;
 }
