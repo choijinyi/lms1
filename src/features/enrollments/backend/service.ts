@@ -119,3 +119,67 @@ export const getMyEnrollments = async (
   return success(parsed.data);
 };
 
+/**
+ * 수강 취소 (Cancel Enrollment)
+ */
+export const cancelEnrollment = async (
+  client: SupabaseClient,
+  userId: string,
+  enrollmentId: string
+): Promise<HandlerResult<EnrollmentResponse, EnrollmentsServiceError, unknown>> => {
+  // 수강 내역 조회
+  const { data: enrollment, error: fetchError } = await client
+    .from('enrollments')
+    .select('*')
+    .eq('id', enrollmentId)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (fetchError) {
+    return failure(500, enrollmentsErrorCodes.createError, fetchError.message);
+  }
+
+  if (!enrollment) {
+    return failure(404, enrollmentsErrorCodes.notFound, 'Enrollment not found');
+  }
+
+  // 이미 취소된 경우
+  if (enrollment.canceled_at) {
+    return failure(400, enrollmentsErrorCodes.alreadyCanceled, 'Enrollment already canceled');
+  }
+
+  // 수강 취소 (soft delete)
+  const { data, error } = await client
+    .from('enrollments')
+    .update({ canceled_at: new Date().toISOString() })
+    .eq('id', enrollmentId)
+    .select('*')
+    .single();
+
+  if (error) {
+    return failure(500, enrollmentsErrorCodes.cancelError, error.message);
+  }
+
+  const mappedEnrollment = {
+    id: data.id,
+    userId: data.user_id,
+    courseId: data.course_id,
+    enrolledAt: data.enrolled_at,
+    canceledAt: data.canceled_at,
+    createdAt: data.created_at,
+    updatedAt: data.updated_at,
+  };
+
+  const parsed = EnrollmentResponseSchema.safeParse(mappedEnrollment);
+  if (!parsed.success) {
+    return failure(
+      500,
+      enrollmentsErrorCodes.validationError,
+      'Enrollment cancellation validation failed',
+      parsed.error.format()
+    );
+  }
+
+  return success(parsed.data);
+};
+

@@ -5,6 +5,7 @@ import type { AppEnv } from '@/backend/hono/context';
 import {
   createEnrollment,
   getMyEnrollments,
+  cancelEnrollment,
 } from './service';
 import {
   CreateEnrollmentInputSchema,
@@ -39,13 +40,30 @@ export const registerEnrollmentsRoutes = (app: Hono<AppEnv>) => {
     async (c) => {
       const query = c.req.valid('query');
       const supabase = c.get('supabase');
-      
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         return c.json({ error: 'Unauthorized' }, 401);
       }
 
       const result = await getMyEnrollments(supabase, user.id, query);
+      return respond(c, result);
+    }
+  );
+
+  // 수강 취소
+  app.patch(
+    `${basePath}/:enrollmentId/cancel`,
+    async (c) => {
+      const enrollmentId = c.req.param('enrollmentId');
+      const supabase = c.get('supabase');
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        return c.json({ error: 'Unauthorized' }, 401);
+      }
+
+      const result = await cancelEnrollment(supabase, user.id, enrollmentId);
       return respond(c, result);
     }
   );

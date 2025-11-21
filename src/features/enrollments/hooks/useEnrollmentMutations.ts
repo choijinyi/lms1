@@ -15,6 +15,16 @@ export const useEnrollmentMutations = () => {
     },
   });
 
-  return { enroll };
+  const cancel = useMutation({
+    mutationFn: async (enrollmentId: string) => {
+      const { data } = await apiClient.patch(`/api/enrollments/${enrollmentId}/cancel`);
+      return EnrollmentResponseSchema.parse(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-enrollments'] });
+    },
+  });
+
+  return { enroll, cancel };
 };
 
